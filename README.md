@@ -1,28 +1,39 @@
-Football-Match-Outcome-Predictor-ML-Python
+This project predicts the outcome of football matches (Win / Draw / Loss) using machine learning built from live match data scraped directly from Understat.com.
 
-This project builds a machine learning model that predicts the outcome of football matches (Win / Draw / Loss) using Python and scikit-learn.
-We start with a raw CSV dataset containing detailed match statistics such as team names, venue, goals, xG, possession, and formation. 
-The workflow involves cleaning, encoding, and transforming this data into a structured format suitable for machine learning models.Project Goals
+Project Overview:
+Instead of relying on static Kaggle/HuggingFace datasets this project automatically scrapes match statistics such as goals, xG (expected goals), possession, shots, and passing data and many more from Understat. The scraped data is cleaned, preprocessed, and converted into a machine learning–ready format. Models are then trained to predict match outcomes based on both team and opponent performance metrics.
 
-- Clean and preprocess raw match data using pandas.
-⁠- Engineer meaningful features for prediction (e.g., team form, opponent strength, venue impact).
-- ⁠Train a Random Forest Classifier as the baseline model.
-⁠- Evaluate performance using accuracy, precision, recall, and F1-score.
-⁠- Experiment with additional models (e.g., Logistic Regression, XGBoost) to improve accuracy.
+Workflow:
 
+(1). Web Scraping:
+- Uses requests and BeautifulSoup to extract data for top leagues (e.g., EPL).
+- Parses match IDs, team names, and key stats (xG, xGA, goals, xPTS, possession, etc.).
+- Stores the data into a structured DataFrame and exports it to a CSV file.
 
-Tech Stack (For Now):
+(2). Data Cleaning & Preprocessing:
+- Converts string-based stats (e.g., percentages, “xG per 90”) to numeric form.
+- Handles missing values and normalizes key performance indicators.
+- Prepares separate or combined home/away records for model training.
+
+(3). Feature Engineering:
+- Builds custom features such as:
+- Recent team form (last 5 games)
+- Opponent strength
+- Venue advantage
+- Rolling averages of team stats (xG, goals, possession)
+- Is it a derby?
+
+(4). Model Training (In Progress):
+- Trains a Random Forest Classifier as the baseline.
+- Evaluates model performance using accuracy, precision, recall, and F1-score.
+- Tests alternative models (e.g., Logistic Regression, XGBoost) for optimization.
+
+(5). Tech Stack:
 - Python
-- Pandas – data cleaning and manipulation
-- Scikit-learn – model building and evaluation
-- Matplotlib / Seaborn – data visualization (optional later)
+- Requests, BeautifulSoup4 – Web scraping
+- Pandas, NumPy – Data processing and feature engineering
+- Scikit-learn – Model building and evaluation
 
-Current Phase:
-- Data cleaning and preprocessing pipeline with pandas
-- Feature selection and baseline model training using Random Forest
-
-Future Plans:
-- Add rolling match statistics (last 5-game form)
-- Introduce advanced feature engineering
-- Test multiple ML algorithms for performance comparison
-- Visualize predictions and model insights
+(6). Future Plans for now:
+- Adding more models and making them work together.
+- Build a small dashboard to visualize predictions interactively, (Most probably StreamLit)
