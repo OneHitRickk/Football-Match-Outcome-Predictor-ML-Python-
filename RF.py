@@ -4,8 +4,8 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
-import seaborn as sns
-import matplotlib.pyplot as plt
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 
 # Reading the CSV
 matches = pd.read_csv("epl_2024_matches_clean.csv")
@@ -47,17 +47,15 @@ matches['result'] = matches.apply(encode_result, axis=1)
 if 'match_id' in matches.columns:
     matches = matches.sort_values(by='match_id').reset_index(drop=True)
 
-# Temp checks for now...
-# print("✅ Columns:", matches.columns.tolist())
-# print("\n✅ Dtypes:\n", matches.dtypes)
-# print("\n✅ Result label counts:\n", matches['result'].value_counts())
+# Temp checks for now...//todo
+# print(" Columns:", matches.columns.tolist())
+# print("\n Dtypes:\n", matches.dtypes)
+# print("\n Result label counts:\n", matches['result'].value_counts())
 # print("\nSample rows:\n", matches.head(5))
 # print("Step 1 Over")
 
 
-# =====================================
 # Step 2: Rolling stats computation (window = 5)
-# =====================================
 window_size = 5
 stats_cols = ['chances', 'xg', 'shots', 'shots on target', 'deep', 'ppda', 'xpts']
 
@@ -92,47 +90,40 @@ for team in matches['teams_home'].unique():
     )
     matches.loc[rolling_away.index, [f'rolling_{s}_away' for s in stats_cols]] = rolling_away.values
 
-# Fill any NaNs from first few matches with the column mean
+# Fill any NaNs from the first few matches with the column mean
 rolling_cols = [f'rolling_{s}_home' for s in stats_cols] + [f'rolling_{s}_away' for s in stats_cols]
 matches[rolling_cols] = matches[rolling_cols].fillna(matches[rolling_cols].mean())
 
-print("✅ Step 2: Rolling averages computed successfully!")
+print(" Step 2: Rolling averages computed successfully!")
 
 
-
-# =====================================
 # STEP 3: FEATURE SET CONSTRUCTION
-# =====================================
 
-print("\n🚀 Step 3: Building the training feature set...\n")
+print("\n Step 3: Building the training feature set...\n")
 
-# --- 1️⃣ Identify useful feature columns ---
 rolling_cols = [col for col in matches.columns if col.startswith('rolling_')]
 base_features = ['home_team', 'away_team']  # encoded team IDs
 target_col = 'result'
 
-# --- 2️⃣ Define input (X) and output (y) ---
 X = matches[base_features + rolling_cols].copy()
 y = matches[target_col].copy()
 
-# --- 3️⃣ Sanity checks ---
-print(f"✅ Features selected: {len(X.columns)} columns")
-print(f"✅ Total matches: {len(X)}")
-print(f"✅ Target distribution:\n{y.value_counts().sort_index().to_dict()}\n")
+# print(f"Features selected: {len(X.columns)} columns")
+# print(f" Total matches: {len(X)}")
+# print(f" Target distribution:\n{y.value_counts().sort_index().to_dict()}\n")
 
 # Check for any missing values
 missing = X.isna().sum().sum()
 if missing > 0:
-    print(f"⚠️ Warning: {missing} missing values found in X — filling with column means.")
+    print(f"Warning: {missing} missing values found in X — filling with column means.")
     X = X.fillna(X.mean())
 else:
-    print("✅ No missing values in feature set.")
+    print(" No missing values in feature set.")
 
-# --- 4️⃣ Final dataset overview ---
-print("\n🔹 Feature preview (first 5 rows):")
+print("\n Feature preview (first 5 rows):")
 print(X.head(5))
 
-print("\n✅ Step 3 complete — dataset ready for ML training!\n")
+print("\n Step 3 complete — dataset ready for ML training!\n")
 
 
 # todo
@@ -145,16 +136,12 @@ features = X.copy()
 features["target"] = y
 
 
-# =========================
-# ✅ STEP 4: MODEL TRAINING
-# =========================
+#  STEP 4: MODEL TRAINING
 
 
-print("\n🚀 Step 4: Training Random Forest model...")
+print("\n Step 4: Training Random Forest model...")
 
-# -------------------------
 # 1. Prepare data
-# -------------------------
 
 X = features.drop(columns=["target"])
 y = features["target"]
@@ -162,42 +149,37 @@ y = features["target"]
 # Split (80% train, 20% test)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
-# -------------------------
-# 2. Train model
-# -------------------------
+# 2. Train model //todo
 rf = RandomForestClassifier(
     n_estimators=200,
     max_depth=10,
     random_state=42,
     class_weight="balanced"
 )
+
 rf.fit(X_train, y_train)
 
-# -------------------------
 # 3. Predictions & Evaluation
-# -------------------------
 y_pred = rf.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
-print(f"\n✅ Model Accuracy: {accuracy:.3f}")
+print(f"\n Model Accuracy: {accuracy:.3f}")
 
-print("\n🔹 Classification Report:")
+print("\n Classification Report:")
 print(classification_report(y_test, y_pred, target_names=["Home Win", "Draw", "Away Win"]))
 
-print("\n🔹 Confusion Matrix:")
+print("\n Confusion Matrix:")
 cm = confusion_matrix(y_test, y_pred)
 print(cm)
 
-# Optional visual
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=["Home Win", "Draw", "Away Win"], yticklabels=["Home Win", "Draw", "Away Win"])
-plt.title("Confusion Matrix - Random Forest")
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
-plt.show()
+# For better visualization//todo
+# sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=["Home Win", "Draw", "Away Win"], yticklabels=["Home Win", "Draw", "Away Win"])
+# plt.title("Confusion Matrix - Random Forest")
+# plt.xlabel("Predicted")
+# plt.ylabel("Actual")
+# plt.show()
 
-# -------------------------
 # 4. Feature Importance
-# -------------------------
 importances = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)
-print("\n🔹 Top 10 Important Features:")
+print("\n Top 10 Important Features:")
 print(importances.head(10))
