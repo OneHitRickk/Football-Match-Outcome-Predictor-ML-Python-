@@ -126,20 +126,61 @@ if __name__ == "__main__":
             if stats:
                 all_matches_data.append(stats)
 
-    # --- STEP 3: Convert all match stats to pandas DataFrame ---
+    # --- STEP 3: Convert all match stats to pandas DataFrame (defensive; draw only for CHANCES) ---
     flat_data = []
     for match in all_matches_data:
-        flat = {"match_id": match["match_id"]}
+        flat = {"match_id": match.get("match_id")}
         for metric, vals in match.items():
             if metric == "match_id":
                 continue
-            flat[f"{metric}_home"] = vals["home"]
-            flat[f"{metric}_away"] = vals["away"]
+
+            # Case A: already flattened keys like 'CHANCES_home' / 'XG_away' etc.
+            if isinstance(metric, str) and (
+                    metric.endswith("_home") or metric.endswith("_away") or metric.endswith("_draw")):
+                flat[metric] = vals
+                continue
+
+            # Case B: grouped dict e.g., "CHANCES": {"home":..., "draw":..., "away":...}
+            if isinstance(vals, dict):
+                home = vals.get("home") if vals.get("home") is not None else None
+                away = vals.get("away") if vals.get("away") is not None else None
+                draw = vals.get("draw") if vals.get("draw") is not None else None
+
+                flat[f"{metric}_home"] = home
+                flat[f"{metric}_away"] = away
+                # Only keep draw for CHANCES
+                if str(metric).upper() == "CHANCES":
+                    flat[f"{metric}_draw"] = draw
+                continue
+
+            # Case C: scalar or unexpected format -> copy as-is
+            flat[metric] = vals
+
         flat_data.append(flat)
 
+    # Build DataFrame and sort for neatness
     df = pd.DataFrame(flat_data)
+    if "match_id" in df.columns:
+        try:
+            df = df.sort_values("match_id").reset_index(drop=True)
+        except Exception:
+            pass
 
-    # --- STEP 4: Save to CSV ---
-    df.to_csv("epl_2024_matches.csv", index=False)
+    # OLD PRINTER
+
+    # # --- STEP 4: Save to CSV ---
+    # df.to_csv("epl_2024_matches.csv", index=False)
+    # print(f"\n✅ Finished scraping {len(all_matches_data)} unique matches across all teams.")
+    # print("💾 Saved DataFrame to epl_2024_matches.csv")
+
+    import os
+
+    # --- STEP 4: Save to CSV (robust path handling) ---
+    raw_dir = os.path.join(os.path.dirname(__file__), "data", "raw")  # folder relative to this script
+    os.makedirs(raw_dir, exist_ok=True)  # create if missing (no error if exists)
+
+    out_path = os.path.join(raw_dir, "epl_2024_matches.csv")
+    df.to_csv(out_path, index=False)
+
     print(f"\n✅ Finished scraping {len(all_matches_data)} unique matches across all teams.")
-    print("💾 Saved DataFrame to epl_2024_matches.csv")
+    print(f"💾 Saved DataFrame to {out_path}")

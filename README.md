@@ -3,7 +3,7 @@ This project predicts the outcome of football matches (Win / Draw / Loss) using 
 Project Overview:
 Instead of relying on static Kaggle/HuggingFace datasets this project automatically scrapes match statistics such as goals, xG (expected goals), possession, shots, and passing data and many more from Understat. The scraped data is cleaned, preprocessed, and converted into a machine learning–ready format. Models are then trained to predict match outcomes based on both team and opponent performance metrics.
 
-Workflow:
+Workflow (Under Development):
 
 (1). Web Scraping:
 - Uses requests and BeautifulSoup to extract data for top leagues (e.g., EPL).
