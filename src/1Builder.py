@@ -1,4 +1,5 @@
 import requests, json, re, pandas as pd
+import os
 from bs4 import BeautifulSoup
 
 
@@ -30,7 +31,7 @@ def get_teams(url, headers):
     for team_id, team_info in data.items():
         name = team_info.get("title", "").strip()  # Team Name
         slug = name.replace(" ", "_")  # Kept here purposely to avoid breaking of the link.
-        teams[name] = f"https://understat.com/team/{slug}/2024"
+        teams[name] = f"https://understat.com/team/{slug}/2020"
     print(f"✅ Found {len(teams)} teams.")  # todo: remove
     return teams
 
@@ -169,17 +170,17 @@ if __name__ == "__main__":
     # OLD PRINTER
 
     # # --- STEP 4: Save to CSV ---
-    # df.to_csv("epl_2024_matches.csv", index=False)
+    # df.to_csv("epl_2023_matches.csv", index=False)
     # print(f"\n✅ Finished scraping {len(all_matches_data)} unique matches across all teams.")
-    # print("💾 Saved DataFrame to epl_2024_matches.csv")
+    # print("💾 Saved DataFrame to epl_2023_matches.csv")
 
-    import os
+
 
     # --- STEP 4: Save to CSV (robust path handling) ---
     raw_dir = os.path.join(os.path.dirname(__file__), "data", "raw")  # folder relative to this script
     os.makedirs(raw_dir, exist_ok=True)  # create if missing (no error if exists)
 
-    out_path = os.path.join(raw_dir, "epl_2024_matches.csv")
+    out_path = os.path.join(raw_dir, "epl_2020_matches.csv")
     df.to_csv(out_path, index=False)
 
     print(f"\n✅ Finished scraping {len(all_matches_data)} unique matches across all teams.")

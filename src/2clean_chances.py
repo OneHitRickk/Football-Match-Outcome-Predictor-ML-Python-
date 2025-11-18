@@ -15,8 +15,8 @@ import numpy as np
 import re
 import os
 
-IN_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/raw/epl_2024_matches.csv"
-OUT_CSV = "epl_2024_matches_clean.csv"
+IN_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/raw/epl_2020_matches.csv"
+OUT_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/clean/epl_2020_matches_clean.csv"
 
 
 def parse_percent_cell(x):
@@ -199,7 +199,7 @@ df[chance_draw_col] = df["_CH_draw"].round(2)
 clean_dir = os.path.join(os.path.dirname(__file__), "data", "clean")
 os.makedirs(clean_dir, exist_ok=True)
 
-out_path = os.path.join(clean_dir, "epl_2024_matches_clean.csv")
+out_path = os.path.join(clean_dir, "epl_2020_matches_clean.csv")
 
 df.drop(columns=["_CH_home", "_CH_away", "_CH_draw"], inplace=True, errors="ignore")
 df.to_csv(out_path, index=False)

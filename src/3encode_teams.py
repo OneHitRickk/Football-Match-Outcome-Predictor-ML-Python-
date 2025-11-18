@@ -4,8 +4,8 @@ import json
 import os
 from sklearn.preprocessing import LabelEncoder
 
-IN_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/clean/epl_2024_matches_clean.csv"         # your cleaned CSV
-OUT_CSV = "epl_2024_matches_encoded.csv"      # result with numeric team ids
+IN_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/clean/epl_all_seasons_clean.csv"         # your cleaned CSV
+OUT_CSV = "epl_all_season_matches_encoded.csv"      # result with numeric team ids
 ENC_JSON = "team_label_encoder_map.json"      # saved mapping
 
 # ---- Load + normalize column names ----
@@ -117,7 +117,7 @@ encoded_dir = os.path.join(os.path.dirname(__file__), "data", "encoded")
 os.makedirs(encoded_dir, exist_ok=True)
 
 # --- Output file paths ---
-out_encoded_csv = os.path.join(encoded_dir, "epl_2024_matches_encoded.csv")
+out_encoded_csv = os.path.join(encoded_dir, "epl_all_seasons_encoded.csv")
 out_encoder_json = os.path.join(encoded_dir, "team_label_encoder_map.json")
 
 # Save CSV

@@ -4,8 +4,8 @@ import numpy as np
 import os
 
 # ---------- CONFIG ----------
-IN_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/encoded/epl_2024_matches_encoded.csv"   # change if your file is named differently
-OUT_CSV = "epl_2024_matches_with_rolls.csv"
+IN_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/encoded/epl_all_seasons_encoded.csv"   # change if your file is named differently
+OUT_CSV = "epl_all_seasons_matches_with_rolls.csv"
 ROLL_WINDOW = 5
 MIN_PERIODS = 1   # we'll compute counts and use shrinkage, so min_periods=1 is fine
 SHRINKAGE_K = 5.0  # pseudo-count for Bayesian shrinkage; tune if needed

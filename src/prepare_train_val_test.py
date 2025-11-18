@@ -4,8 +4,8 @@ import numpy as np
 import os
 
  # input rolling output (relative to this script)
-IN_CSV = os.path.join(os.path.dirname(__file__), "data", "rolls", "epl_2024_matches_with_rolls.csv")
-OUT_PREFIX = "epl_2024"                      # will write epl_2024_train.csv, _val.csv, _test.csv
+IN_CSV = os.path.join(os.path.dirname(__file__), "data", "rolls", "/Users/rishimodi/Desktop/Match_Predictor/src/data/rolls/epl_all_seasons_matches_with_rolls.csv")
+OUT_PREFIX = "epl_all_seasons"                      # will write epl_2024_train.csv, _val.csv, _test.csv
 TRAIN_FRAC = 0.70
 VAL_FRAC = 0.15
 TEST_FRAC = 0.15

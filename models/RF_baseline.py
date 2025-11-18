@@ -7,10 +7,10 @@ import os, sys
 # -------------------------------
 # CONFIG
 # -------------------------------
-TRAIN_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/splits/epl_2024_train.csv"
-VAL_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/splits/epl_2024_val.csv"
-TEST_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/splits/epl_2024_test.csv"
-ENCODED_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/encoded/epl_2024_matches_encoded.csv"  # source of 'result' if missing
+TRAIN_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/splits/epl_all_seasons_train.csv"
+VAL_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/splits/epl_all_seasons_val.csv"
+TEST_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/splits/epl_all_seasons_test.csv"
+ENCODED_CSV = "/Users/rishimodi/Desktop/Match_Predictor/src/data/encoded/epl_all_seasons_matches_encoded.csv"  # source of 'result' if missing
 MODEL_OUT = "rf_baseline_model.pkl"
 
 # -------------------------------
